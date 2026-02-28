@@ -1,12 +1,29 @@
 // Global state management
 let currentPage = 'homePage';
 let deferredPrompt;
+let savedScrollPositions = {}; // Store scroll positions for each page
 
-// Page navigation with history support (PROBLEM 3 FIX)
+// Save scroll position before leaving
+function saveScrollPosition(pageId) {
+    savedScrollPositions[pageId] = window.scrollY || window.pageYOffset;
+}
+
+// Restore scroll position after loading
+function restoreScrollPosition(pageId) {
+    setTimeout(() => {
+        const savedPosition = savedScrollPositions[pageId] || 0;
+        window.scrollTo(0, savedPosition);
+    }, 100);
+}
+
+// Page navigation with history support and scroll position
 function showPage(pageId) {
     const homePage = document.getElementById('homePage');
     const dynamicContent = document.getElementById('dynamicContent');
     const infoButton = document.getElementById('infoButton');
+    
+    // Save current scroll position before leaving
+    saveScrollPosition(currentPage);
     
     if (pageId === 'homePage') {
         homePage.style.display = 'block';
@@ -15,6 +32,7 @@ function showPage(pageId) {
         currentPage = 'homePage';
         // Update URL without reloading
         window.history.pushState({page: 'homePage'}, '', '#home');
+        restoreScrollPosition('homePage');
         return;
     }
     
@@ -49,6 +67,9 @@ function showPage(pageId) {
             loadLinklerPage();
             break;
     }
+    
+    // Restore scroll position for this page
+    restoreScrollPosition(pageId);
 }
 
 // Back button
@@ -561,24 +582,30 @@ function calculateYas() {
 
 // ============= LÜĞƏT =============
 function loadLugetPage() {
+    let termsHtml = '';
+    DICTIONARY.forEach((item, index) => {
+        termsHtml += `
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+                <h3 class="font-bold text-gray-800">${item.term}</h3>
+                <p class="text-gray-600 text-sm mt-1">${item.definition}</p>
+            </div>
+        `;
+    });
+    
     const content = `
         ${createBackButton()}
         <div class="max-w-4xl mx-auto px-4 py-8 page-transition">
             <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
                 <i class="fas fa-book text-blue-600"></i>
-                Akademik Lüğət
+                ${SITE_TEXT.pages.luget.title}
             </h1>
             
             <div class="bg-white rounded-xl p-6 shadow-md space-y-4">
-                <div class="border-l-4 border-blue-500 pl-4 py-2">
-                    <h3 class="font-bold text-gray-800">Mühazirə</h3>
-                    <p class="text-gray-600 text-sm mt-1">Müəllimin keçdiyi dərs</p>
-                </div>
+                ${termsHtml}
                 
-                <!-- Buraya digər terminləri əlavə edə bilərsiniz -->
                 <div class="text-center text-gray-500 mt-8 p-8 bg-gray-50 rounded-lg">
                     <i class="fas fa-info-circle text-4xl mb-3 text-blue-400"></i>
-                    <p>Digər terminlər tezliklə əlavə ediləcək</p>
+                    <p>Yeni terminlər əlavə etmək üçün config.js faylını redaktə edin</p>
                 </div>
             </div>
         </div>
@@ -588,24 +615,33 @@ function loadLugetPage() {
 
 // ============= MƏLUMAT =============
 function loadMelumatPage() {
+    let infoHtml = '';
+    INFORMATION.forEach((item, index) => {
+        infoHtml += `
+            <div class="border-l-4 border-${item.color}-500 pl-4 py-2">
+                <h3 class="font-bold text-gray-800">
+                    <i class="fas ${item.icon} text-${item.color}-600 mr-2"></i>
+                    ${item.title}
+                </h3>
+                <p class="text-gray-600 text-sm mt-1">${item.content}</p>
+            </div>
+        `;
+    });
+    
     const content = `
         ${createBackButton()}
         <div class="max-w-4xl mx-auto px-4 py-8 page-transition">
             <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
                 <i class="fas fa-info-circle text-yellow-600"></i>
-                Faydalı Məlumatlar
+                ${SITE_TEXT.pages.melumat.title}
             </h1>
             
             <div class="bg-white rounded-xl p-6 shadow-md space-y-4">
-                <div class="border-l-4 border-yellow-500 pl-4 py-2">
-                    <h3 class="font-bold text-gray-800">Əlaçı olmaq üçün</h3>
-                    <p class="text-gray-600 text-sm mt-1">Bütün fənnlər 91+ bal olmalıdır</p>
-                </div>
+                ${infoHtml}
                 
-                <!-- Buraya digər məlumatları əlavə edə bilərsiniz -->
                 <div class="text-center text-gray-500 mt-8 p-8 bg-gray-50 rounded-lg">
                     <i class="fas fa-info-circle text-4xl mb-3 text-yellow-400"></i>
-                    <p>Digər məlumatlar tezliklə əlavə ediləcək</p>
+                    <p>Yeni məlumatlar əlavə etmək üçün config.js faylını redaktə edin</p>
                 </div>
             </div>
         </div>
@@ -615,18 +651,8 @@ function loadMelumatPage() {
 
 // ============= SÜRƏTLİ LİNKLƏR =============
 function loadLinklerPage() {
-    const links = [
-        { title: 'BDU Rəsmi Sayt', url: 'https://bsu.edu.az', icon: 'fa-university', color: 'indigo', type: 'web' },
-        { title: 'SemsLogin (Akademik Portal)', url: 'https://share.google/7ljpthpUCiOMOeS82', icon: 'fa-graduation-cap', color: 'green', type: 'web' },
-        { title: 'BDU WhatsApp Kanalı', url: 'https://whatsapp.com/channel/0029Va85Ls85q08WyYoGeJ3r', icon: 'fa-whatsapp', color: 'green', type: 'app' },
-        { title: 'BDU Instagram', url: 'https://www.instagram.com/bdu_eduaz', icon: 'fa-instagram', color: 'pink', type: 'app' },
-        { title: 'BDU Telegram', url: 'https://t.me/bdu_eduaz', icon: 'fa-telegram', color: 'blue', type: 'app' },
-        { title: 'Sayt Sahibinin Instagram', url: 'https://www.instagram.com/desespere_etoile', icon: 'fa-user', color: 'purple', type: 'app' },
-        { title: 'Tələbə Chat Qrupu', url: 'https://t.me/+WUKxtnDjo2E5YTcy', icon: 'fa-comments', color: 'teal', type: 'app' }
-    ];
-    
     let linksHtml = '';
-    links.forEach(link => {
+    QUICK_LINKS.forEach(link => {
         linksHtml += `
             <a href="${link.url}" target="_blank" rel="noopener noreferrer"
                class="block bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition calculator-card">
@@ -648,11 +674,16 @@ function loadLinklerPage() {
         <div class="max-w-4xl mx-auto px-4 py-8 page-transition">
             <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
                 <i class="fas fa-link text-pink-600"></i>
-                Sürətli Linklər
+                ${SITE_TEXT.pages.linkler.title}
             </h1>
             
             <div class="space-y-3">
                 ${linksHtml}
+            </div>
+            
+            <div class="text-center text-gray-500 mt-8 p-6 bg-white rounded-xl shadow-md">
+                <i class="fas fa-info-circle text-2xl mb-2 text-pink-400"></i>
+                <p class="text-sm">Yeni linklər əlavə etmək üçün config.js faylını redaktə edin</p>
             </div>
         </div>
     `;
@@ -705,9 +736,12 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Handle browser back/forward buttons (PROBLEM 3 FIX)
+// Handle browser back/forward buttons with scroll position
 window.addEventListener('popstate', function(event) {
     if (event.state && event.state.page) {
+        // Save current scroll position
+        saveScrollPosition(currentPage);
+        
         // Don't call showPage to avoid adding to history again
         const pageId = event.state.page;
         const homePage = document.getElementById('homePage');
@@ -719,6 +753,7 @@ window.addEventListener('popstate', function(event) {
             dynamicContent.innerHTML = '';
             infoButton.style.display = 'flex';
             currentPage = 'homePage';
+            restoreScrollPosition('homePage');
         } else {
             homePage.style.display = 'none';
             infoButton.style.display = 'none';
@@ -748,6 +783,9 @@ window.addEventListener('popstate', function(event) {
                     loadLinklerPage();
                     break;
             }
+            
+            // Restore scroll position
+            restoreScrollPosition(pageId);
         }
     }
 });

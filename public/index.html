@@ -9,8 +9,11 @@
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/static/manifest.json">
-    <link rel="icon" type="image/png" href="/static/icon-192.png">
-    <link rel="apple-touch-icon" href="/static/icon-192.png">
+    <link rel="icon" type="image/png" href="/static/app-icon.png">
+    <link rel="apple-touch-icon" href="/static/app-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BDU Hesablayıcı">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,6 +25,45 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
+        
+        /* Splash Screen */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-in-out 1.5s forwards;
+        }
+        
+        #splashScreen img {
+            width: 150px;
+            height: 150px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        
+        #splashScreen h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+        
         .page-transition {
             animation: fadeIn 0.3s ease-in-out;
         }
@@ -107,6 +149,12 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <img src="/static/app-icon.png" alt="UniFy Logo">
+        <h1>BDU Hesablayıcı</h1>
+    </div>
+
     <!-- WhatsApp Banner -->
     <div class="whatsapp-banner">
         <a href="https://wa.me/994559406018" target="_blank" class="flex items-center justify-between px-4 py-3 text-white">
@@ -234,6 +282,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="/static/config.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>
