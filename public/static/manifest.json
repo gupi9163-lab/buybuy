@@ -1,6 +1,6 @@
 {
-  "name": "BDU Akademik Hesablayıcı",
-  "short_name": "BDU Hesablayıcı",
+  "name": "Akademik Hesablayıcı",
+  "short_name": "UniFy",
   "description": "Semestr, ÜOMG, Yaş və digər akademik hesablamalar",
   "start_url": "/",
   "display": "standalone",
