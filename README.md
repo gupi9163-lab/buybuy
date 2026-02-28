@@ -1,6 +1,18 @@
 # BDU Akademik Hesablayıcı
 
-## Layihə Haqqında
+## Son Yeniləmələr (v1.1)
+
+### 🔧 Düzəldilmiş Problemlər:
+1. ✅ **Bal Yarat Düyməsi** - Seminar və kollekvium bal sayı daxil edildikdən sonra "Bal Yarat" düyməsinə basmaq lazımdır
+2. ✅ **Davamiyyət Balı Düzəldildi** - Qayıb sayı 0 olanda artıq düzgün maksimum bal (10) verilir
+3. ✅ **Navigasiya Tarixçəsi** - İstifadəçi hesablayıcı səhifələrindən çıxanda həmin səhifədə qalır, brauzerin geri düyməsi düzgün işləyir
+
+### 🎯 Yeni Xüsusiyyətlər:
+- **URL History**: Hər səhifənin öz URL-i var (#semestrPage, #uomgPage və s.)
+- **Browser Back/Forward**: Brauzerin geri/irəli düymələri düzgün işləyir
+- **Improved UX**: Daha yaxşı istifadəçi təcrübəsi
+
+---
 BDU tələbələri üçün hazırlanmış akademik hesablayıcı proqramı. Bu PWA (Progressive Web App) tətbiqi offline işləyir və mobil cihazlara quraşdırıla bilər.
 
 ## Xüsusiyyətlər
