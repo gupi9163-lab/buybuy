@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="description" content="BDU Akademik Hesablayıcı - Semestr, ÜOMG, Yaş və digər hesablamalar">
+    <title>BDU Akademik Hesablayıcı</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" type="image/png" href="/static/icon-192.png">
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .page-transition {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .whatsapp-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .content-wrapper {
+            padding-top: 60px;
+        }
+        .calculator-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .info-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        .info-button:hover {
+            transform: scale(1.1);
+        }
+        .info-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .back-button {
+            position: sticky;
+            top: 65px;
+            z-index: 100;
+        }
+        .install-prompt {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            max-width: 90%;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- WhatsApp Banner -->
+    <div class="whatsapp-banner">
+        <a href="https://wa.me/994559406018" target="_blank" class="flex items-center justify-between px-4 py-3 text-white">
+            <span class="text-sm font-medium">🎓 Ən ucuz sərbəst iş hazırlanması</span>
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper min-h-screen pb-20">
+        <!-- Home Page -->
+        <div id="homePage" class="page-transition">
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">
+                    <i class="fas fa-graduation-cap text-indigo-600"></i>
+                    BDU Akademik Hesablayıcı
+                </h1>
+                <p class="text-gray-600 text-center mb-8">Bütün akademik hesablamalarınız bir yerdə</p>
+
+                <!-- Calculator Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Semestr Balı -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md" onclick="showPage('semestrPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-calculator text-indigo-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Semestr Balı</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">Seminar, kollekvium, davamiyyət və sərbəst iş ballarını hesablayın</p>
+                    </div>
+
+                    <!-- ÜOMG Hesablama -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md" onclick="showPage('uomgPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">ÜOMG Hesablama</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">Kredit və ballarınıza əsasən ÜOMG-nizi hesablayın</p>
+                    </div>
+
+                    <!-- 25% İmtahan Pulu -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md" onclick="showPage('imtahanPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-money-bill-wave text-red-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Kəsr Pulu</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">25% imtahan (kəsr) pulunu hesablayın</p>
+                    </div>
+
+                    <!-- Yaş Hesablayıcı -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md" onclick="showPage('yasPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-birthday-cake text-purple-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Yaş Hesablayıcı</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">Yaşınızı və ad gününüzə qalan günləri öyrənin</p>
+                    </div>
+
+                    <!-- Lüğət -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md" onclick="showPage('lugetPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-book text-blue-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Lüğət</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">Akademik terminlərin izahları</p>
+                    </div>
+
+                    <!-- Məlumat -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md" onclick="showPage('melumatPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-info-circle text-yellow-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Məlumat</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">Tez-tez verilən suallar və cavablar</p>
+                    </div>
+
+                    <!-- Sürətli Linklər -->
+                    <div class="calculator-card bg-white rounded-xl p-6 shadow-md col-span-1 md:col-span-2" onclick="showPage('linklerPage')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-link text-pink-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Sürətli Linklər</h2>
+                        </div>
+                        <p class="text-gray-600 text-sm">BDU və faydalı resurslara sürətli keçid</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other pages will be loaded dynamically -->
+        <div id="dynamicContent"></div>
+    </div>
+
+    <!-- Info Button -->
+    <div id="infoButton" class="info-button">
+        <i class="fas fa-info text-xl"></i>
+    </div>
+
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-mobile-alt text-indigo-600 text-2xl mr-3"></i>
+                <div>
+                    <p class="font-bold text-gray-800">Ana ekrana əlavə edin</p>
+                    <p class="text-sm text-gray-600">Offline istifadə üçün</p>
+                </div>
+            </div>
+            <button onclick="installApp()" class="ml-4 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Quraşdır
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
