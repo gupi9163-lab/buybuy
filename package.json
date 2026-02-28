@@ -4,9 +4,10 @@
   "description": "BDU Akademik Hesablayıcı - Semestr, ÜOMG və digər hesablamalar",
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp public/index.html dist/ && cp -r public/static dist/",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name webapp",
+    "deploy": "wrangler deploy",
     "dev": "cd public && python3 -m http.server 3000",
-    "clean": "rm -rf dist node_modules"
+    "clean": "rm -rf dist node_modules",
+    "preview": "wrangler dev"
   },
   "devDependencies": {
     "wrangler": "^4.69.0"
