@@ -1,4 +1,5 @@
-const CACHE_NAME = 'bdu-calculator-v1';
+const CACHE_NAME = 'bdu-calculator-v2'; // versiyanı dəyiş (v1 -> v2)
+
 const urlsToCache = [
   '/',
   '/index.html',
@@ -26,18 +27,19 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Cache hit - return response
+
         if (response) {
           return response;
         }
+
         return fetch(event.request).then(
           (response) => {
-            // Check if valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+
+            // 🔥 BURANI dəyişdim (response.type silindi)
+            if (!response || response.status !== 200) {
               return response;
             }
 
-            // Clone the response
             const responseToCache = response.clone();
 
             caches.open(CACHE_NAME)
@@ -47,7 +49,10 @@ self.addEventListener('fetch', (event) => {
 
             return response;
           }
-        );
+        ).catch(() => {
+          // Offline fallback
+          return caches.match('/index.html');
+        });
       })
   );
 });
@@ -55,6 +60,7 @@ self.addEventListener('fetch', (event) => {
 // Activate event
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
