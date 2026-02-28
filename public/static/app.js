@@ -2,7 +2,7 @@
 let currentPage = 'homePage';
 let deferredPrompt;
 
-// Page navigation
+// Page navigation with history support (PROBLEM 3 FIX)
 function showPage(pageId) {
     const homePage = document.getElementById('homePage');
     const dynamicContent = document.getElementById('dynamicContent');
@@ -13,12 +13,17 @@ function showPage(pageId) {
         dynamicContent.innerHTML = '';
         infoButton.style.display = 'flex';
         currentPage = 'homePage';
+        // Update URL without reloading
+        window.history.pushState({page: 'homePage'}, '', '#home');
         return;
     }
     
     homePage.style.display = 'none';
     infoButton.style.display = 'none';
     currentPage = pageId;
+    
+    // Update URL without reloading
+    window.history.pushState({page: pageId}, '', '#' + pageId);
     
     // Load the appropriate page content
     switch(pageId) {
@@ -86,9 +91,14 @@ function loadSemestrPage() {
                         <i class="fas fa-chalkboard-teacher text-indigo-600"></i>
                         Seminar bal sayı (maksimum 9)
                     </label>
-                    <input type="number" id="seminarCount" min="1" max="9" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                           onchange="generateSeminarInputs()">
+                    <div class="flex gap-2">
+                        <input type="number" id="seminarCount" min="1" max="9" 
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <button onclick="generateSeminarInputs()" 
+                                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                            <i class="fas fa-plus mr-2"></i>Bal Yarat
+                        </button>
+                    </div>
                     <div id="seminarInputs" class="mt-3 space-y-2"></div>
                 </div>
 
@@ -98,9 +108,14 @@ function loadSemestrPage() {
                         <i class="fas fa-clipboard-list text-green-600"></i>
                         Kollekvium bal sayı (maksimum 4)
                     </label>
-                    <input type="number" id="kollekviumCount" min="1" max="4"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                           onchange="generateKollekviumInputs()">
+                    <div class="flex gap-2">
+                        <input type="number" id="kollekviumCount" min="1" max="4"
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <button onclick="generateKollekviumInputs()" 
+                                class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                            <i class="fas fa-plus mr-2"></i>Bal Yarat
+                        </button>
+                    </div>
                     <div id="kollekviumInputs" class="mt-3 space-y-2"></div>
                 </div>
 
@@ -136,7 +151,7 @@ function loadSemestrPage() {
                         <i class="fas fa-times-circle text-red-600"></i>
                         Qayıb sayı
                     </label>
-                    <input type="number" id="qayibSay" min="0"
+                    <input type="number" id="qayibSay" min="0" value="0"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                 </div>
 
@@ -194,13 +209,14 @@ function generateKollekviumInputs() {
 }
 
 function calculateDavamiyyetBal(saat, qayib) {
+    // PROBLEM 2 FIX: Qayıb 0 olanda maksimum bal verilməlidir
     const rules = {
-        30: [[1,2,9], [3,3,8], [4,Infinity,0]],
-        45: [[1,1,10], [2,3,9], [4,5,8], [6,Infinity,0]],
-        60: [[1,1,10], [2,4,9], [5,7,8], [8,Infinity,0]],
-        75: [[1,1,10], [2,5,9], [6,9,8], [10,Infinity,0]],
-        90: [[1,2,10], [3,6,9], [7,11,8], [12,Infinity,0]],
-        105: [[1,2,10], [3,7,9], [8,13,8], [14,Infinity,0]]
+        30: [[0,0,10], [1,2,9], [3,3,8], [4,Infinity,0]],
+        45: [[0,0,10], [1,1,10], [2,3,9], [4,5,8], [6,Infinity,0]],
+        60: [[0,0,10], [1,1,10], [2,4,9], [5,7,8], [8,Infinity,0]],
+        75: [[0,0,10], [1,1,10], [2,5,9], [6,9,8], [10,Infinity,0]],
+        90: [[0,0,10], [1,2,10], [3,6,9], [7,11,8], [12,Infinity,0]],
+        105: [[0,0,10], [1,2,10], [3,7,9], [8,13,8], [14,Infinity,0]]
     };
     
     if (!rules[saat]) return 0;
@@ -689,9 +705,56 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Show info button only on home page
-window.addEventListener('popstate', function() {
-    if (currentPage !== 'homePage') {
-        showPage('homePage');
+// Handle browser back/forward buttons (PROBLEM 3 FIX)
+window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.page) {
+        // Don't call showPage to avoid adding to history again
+        const pageId = event.state.page;
+        const homePage = document.getElementById('homePage');
+        const dynamicContent = document.getElementById('dynamicContent');
+        const infoButton = document.getElementById('infoButton');
+        
+        if (pageId === 'homePage') {
+            homePage.style.display = 'block';
+            dynamicContent.innerHTML = '';
+            infoButton.style.display = 'flex';
+            currentPage = 'homePage';
+        } else {
+            homePage.style.display = 'none';
+            infoButton.style.display = 'none';
+            currentPage = pageId;
+            
+            // Reload page content
+            switch(pageId) {
+                case 'semestrPage':
+                    loadSemestrPage();
+                    break;
+                case 'uomgPage':
+                    loadUomgPage();
+                    break;
+                case 'imtahanPage':
+                    loadImtahanPage();
+                    break;
+                case 'yasPage':
+                    loadYasPage();
+                    break;
+                case 'lugetPage':
+                    loadLugetPage();
+                    break;
+                case 'melumatPage':
+                    loadMelumatPage();
+                    break;
+                case 'linklerPage':
+                    loadLinklerPage();
+                    break;
+            }
+        }
+    }
+});
+
+// Initialize history state on page load
+window.addEventListener('load', function() {
+    if (!window.history.state) {
+        window.history.replaceState({page: 'homePage'}, '', '#home');
     }
 });
