@@ -1,16 +1,22 @@
 # BDU Akademik Hesablayıcı
 
-## Son Yeniləmələr (v1.1)
+## Son Yeniləmələr (v1.2.0)
+
+### 🎨 Yeni Dizayn
+- ✅ **UniFy İkonu** - Yeni professional ikon və splash screen
+- ✅ **Splash Screen** - Sayt açılarkən gözəl yükləmə ekranı
 
 ### 🔧 Düzəldilmiş Problemlər:
 1. ✅ **Bal Yarat Düyməsi** - Seminar və kollekvium bal sayı daxil edildikdən sonra "Bal Yarat" düyməsinə basmaq lazımdır
 2. ✅ **Davamiyyət Balı Düzəldildi** - Qayıb sayı 0 olanda artıq düzgün maksimum bal (10) verilir
-3. ✅ **Navigasiya Tarixçəsi** - İstifadəçi hesablayıcı səhifələrindən çıxanda həmin səhifədə qalır, brauzerin geri düyməsi düzgün işləyir
+3. ✅ **Scroll Position Saxlanması** - İstifadəçi səhifədə scroll edib başqa yerə gedəndə, geri qayıtdıqda eyni yerdə qalır
 
 ### 🎯 Yeni Xüsusiyyətlər:
-- **URL History**: Hər səhifənin öz URL-i var (#semestrPage, #uomgPage və s.)
-- **Browser Back/Forward**: Brauzerin geri/irəli düymələri düzgün işləyir
-- **Improved UX**: Daha yaxşı istifadəçi təcrübəsi
+- **Config.js Sistemi**: Artıq kodlaşdırma bilməyə ehtiyac yoxdur! `config.js` faylından saytın məzmununu asanlıqla dəyişdirin
+- **Versiya Sistemi**: Professional versiya idarəetmə sistemi (v1.2.0)
+- **Manual Redaktə**: 2 ətraflı rəhbər fayl:
+  - `MANUAL_REDAKTE_REHBERI.md` - Saytı necə redaktə edəcəyinizi öyrənin
+  - `VERSIYA_REHBERI.md` - Versiya sistemini necə istifadə edəcəyinizi öyrənin
 
 ---
 BDU tələbələri üçün hazırlanmış akademik hesablayıcı proqramı. Bu PWA (Progressive Web App) tətbiqi offline işləyir və mobil cihazlara quraşdırıla bilər.
@@ -47,7 +53,60 @@ BDU tələbələri üçün hazırlanmış akademik hesablayıcı proqramı. Bu P
 - **Platform**: Cloudflare Pages
 - **PWA**: Service Worker, Web Manifest
 
-## Quraşdırma və İstifadə
+## 📝 Manual Redaktə (Kodlaşdırma Olmadan)
+
+Saytın məzmununu dəyişmək üçün kodlaşdırma bilməyinizə ehtiyac yoxdur!
+
+### Nə Dəyişdirə Bilərəm?
+- ✏️ **Lüğət** - Yeni akademik terminlər əlavə edin
+- 📚 **Məlumat** - FAQ və faydalı məlumatlar əlavə edin
+- 🔗 **Sürətli Linklər** - Yeni linklər əlavə edin
+- 💬 **WhatsApp Banner** - Telefon nömrəsi və mesajı dəyişdirin
+- ℹ️ **Info Button** - Mesajı fərqliləşdirin
+
+### Necə Dəyişdirəcəm?
+
+**1. `config.js` faylını açın:**
+```
+Yol: /home/user/webapp/public/static/config.js
+```
+
+**2. İstədiyiniz bölməni tapın və dəyişdirin**
+
+**3. Yadda saxlayın və deploy edin:**
+```bash
+cd /home/user/webapp
+npm run build
+git add .
+git commit -m "Yeni məzmun əlavə edildi"
+git push origin main
+npm run deploy
+```
+
+### 📖 Ətraflı Rəhbərlər:
+- **MANUAL_REDAKTE_REHBERI.md** - Addım-addım təlimat (Azərbaycanca)
+- **VERSIYA_REHBERI.md** - Versiya sistemi izahı (Azərbaycanca)
+
+### Nümunə: Lüğətə Yeni Termin Əlavə Etmək
+
+`config.js` faylında:
+```javascript
+const DICTIONARY = [
+    {
+        term: "Mühazirə",
+        definition: "Müəllimin keçdiyi dərs"
+    },
+    // YENİ TERMİN ƏLAVƏ ET ↓
+    {
+        term: "Magistratura",
+        definition: "Bakalavr dərəcəsindən sonrakı təhsil pilləsi"
+    }
+];
+```
+
+Bu qədər! Daha ətraflı məlumat üçün `MANUAL_REDAKTE_REHBERI.md` faylına baxın.
+
+---
 
 ### Development
 ```bash
