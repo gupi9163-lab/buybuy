@@ -59,13 +59,30 @@ git add .
 git commit -m "Update"
 git push origin main
 
-# Cloudflare Pages-ə deploy edin
-npm run deploy:prod
+# Cloudflare Pages-ə deploy edin (API key lazımdır)
+npm run deploy
+```
+
+**Cloudflare Pages Deploy Təlimatı:**
+1. **Deploy** tab-ına keçin və Cloudflare API key quraşdırın
+2. Cloudflare Dashboard-da: Pages > Create a project > Connect to Git
+3. GitHub repository seçin: `gupi9163-lab/buybuy`
+4. Build settings:
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+   - Root directory: `/`
+5. Deploy edin və URL alın
+
+**Və ya Manual Deploy:**
+```bash
+# Wrangler ilə manual deploy
+npx wrangler pages deploy dist --project-name bdu-hesablayici
 ```
 
 ## URLs
 - **GitHub**: https://github.com/gupi9163-lab/buybuy
-- **Production**: Deploy ediləcək
+- **Test (Sandbox)**: https://3000-iv1zlj7eebzym1mly7mg1-b32ec7bb.sandbox.novita.ai
+- **Production (Cloudflare)**: Deploy edilməlidir (bax aşağıya)
 
 ## Təkmilləşdirmə Planları
 - [ ] Lüğət bölməsinə daha çox termin əlavə edilməsi
