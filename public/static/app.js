@@ -95,6 +95,16 @@ function getResultEmoji(score) {
     return '⚠️ 0 BAL ⚠️';
 }
 
+function getResultEmojiİ(score) {
+    if (score >= 50) return '🎉 MÜVƏFFƏQİYYƏTLƏ KEÇDİNİZ! ✅';
+    if (score >= 45) return '🔥 ÇOX 📊';
+    if (score >= 41) return '💣 YAXŞI 📈';
+    if (score >= 36) return '🫂 KAFİ 📉';
+    if (score >= 26) return '🎭 ZƏİF 📴';
+    if (score > 0) return '🗿 YAXŞI OLACAQ 🆒';
+    return '⚠️ 0 BAL ⚠️';
+}
+
 // ============= SEMESTR BAL HESABLAMA =============
 function loadSemestrPage() {
     const content = `
@@ -420,7 +430,7 @@ function calculateUomg() {
             <p><strong>Ümumi kredit:</strong> ${kreditTotal}</p>
             <hr class="my-4 border-green-200">
             <p class="text-2xl font-bold text-center text-green-600">${uomg.toFixed(2)} ÜOMG</p>
-            <p class="text-lg text-center font-medium">${getResultEmoji(uomg)}</p>
+            <p class="text-lg text-center font-medium">${getResultEmojiİ(uomg)}</p>
         </div>
     `;
     resultDiv.classList.remove('hidden');
